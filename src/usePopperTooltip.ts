@@ -32,6 +32,9 @@ export function usePopperTooltip(
   config: Config = {},
   popperOptions: PopperOptions = {}
 ) {
+  const showTimeout = React.useRef<any>();
+  const hideTimeout = React.useRef<any>();
+
   // Merging options with default options.
   // Keys with undefined values are replaced with the default ones if any.
   // Keys with other values pass through.
@@ -96,20 +99,36 @@ export function usePopperTooltip(
   );
 
   const hideTooltip = React.useCallback(() => {
-    clearTimeout(timer.current);
-    timer.current = window.setTimeout(
-      () => setVisible(false),
-      finalConfig.delayHide
-    );
+    hideTimeout.current = setTimeout(() => {
+      clearTimeout(timer.current);
+      timer.current = window.setTimeout(
+        () => setVisible(false),
+        finalConfig.delayHide
+      );
+    }, 50) as any;
+
+    clearShowTimeout();
   }, [finalConfig.delayHide, setVisible]);
 
+  function clearHideTimeout() {
+    clearTimeout(hideTimeout.current);
+  }
+
   const showTooltip = React.useCallback(() => {
-    clearTimeout(timer.current);
-    timer.current = window.setTimeout(
-      () => setVisible(true),
-      finalConfig.delayShow
-    );
+    showTimeout.current = setTimeout(() => {
+      clearTimeout(timer.current);
+      timer.current = window.setTimeout(
+        () => setVisible(true),
+        finalConfig.delayShow
+      );
+    }, 0) as any;
+
+    clearHideTimeout();
   }, [finalConfig.delayShow, setVisible]);
+
+  function clearShowTimeout() {
+    clearTimeout(showTimeout.current);
+  }
 
   const toggleTooltip = React.useCallback(() => {
     if (getLatest().visible) {

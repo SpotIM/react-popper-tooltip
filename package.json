@@ -1,6 +1,6 @@
 {
-  "name": "react-popper-tooltip",
-  "version": "4.3.0",
+  "name": "@spotim/react-popper-tooltip",
+  "version": "4.3.1",
   "description": "React tooltip library built around react-popper",
   "author": "Mohsin Ul Haq <mohsinulhaq01@gmail.com>",
   "license": "MIT",
